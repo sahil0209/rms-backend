@@ -1,0 +1,52 @@
+version : '3.8'
+
+services:
+  backend:
+    container_name: node-api
+    restart: always
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_DATABASE=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    volumes:
+    - .:/app
+    networks:
+      - main
+     
+  
+  db:
+    container_name: postgres
+    image: postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - data:/data/db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - main
+
+  # pgadmin-compose:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "admin"
+  #   ports:
+  #     - "16543:80"
+  #   depends_on:
+  #     - db
+
+networks:
+  main:
+    name : node-postgres-angular
+
+volumes:
+  data: {}
