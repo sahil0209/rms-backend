@@ -1,4 +1,4 @@
-const pool = require("./db").pool;
+const pool = require("../db").pool;
 
 const getUsers = (request, response) => {
     // console.log("Function Hit");
