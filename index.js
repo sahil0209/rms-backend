@@ -14,6 +14,7 @@ require("dotenv").config();
 const port = process.env.PORT;
 const userRoute = require("./routes/users");
 const managerRoute = require("./routes/managers");
+const adminRoute = require("./routes/admin");
 
 app.use(bodyParser.json());
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoute);
 app.use("/manager", managerRoute);
+app.use("/admin", adminRoute);
 
 // app.listen(port, () => {
 //     console.log(`App running on port ${port}.`);
