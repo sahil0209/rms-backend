@@ -2,9 +2,13 @@ const User = require("../models/user");
 
 exports.getUsers = (req, res, next) => {
     // console.log("Function Hit");
-    User.findAll()
+    User.findAll({
+        attributes: ["name"],
+    })
         .then((users) => {
-            res.status(200).json({ users: users });
+            // console.log(users[0].dataValues.name);
+            // res.status(200).json(users);
+            
         })
         .catch((err) => console.log(err));
 };
@@ -26,4 +30,3 @@ exports.createUser = (req, res, next) => {
             console.log(err);
         });
 };
-

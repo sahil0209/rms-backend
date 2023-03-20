@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.get("/", controllers.showProject);
 
+router.put("/projectApproved", controllers.approveProject);
+router.put("/projectDeclined", controllers.declineProject);
+
 // router.get("/showManagers", controllers.showManagers);
 
 // router.get("/showEmployees", controllers.showEmployees);
