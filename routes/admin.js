@@ -1,13 +1,16 @@
-const controllers = require("../controllers/admin");
+const adminControllers = require("../controllers/admin");
+const managerControllers = require("../controllers/managers");
 const express = require("express");
 const router = express.Router();
 
 
 
-router.get("/showProjects", controllers.showProject);
+router.get("/showProjects", adminControllers.showProject);
 
-router.put("/projectApproved", controllers.approveProject);
-router.put("/projectDeclined", controllers.declineProject);
+router.put("/projectApproved", adminControllers.approveProject);
+router.put("/projectDeclined", adminControllers.declineProject);
+
+router.post("/getEmployeesWithProjectID", managerControllers.getEmployeesWithProject);
 
 
 // router.get("/showDepartments", controllers.showDepartments);

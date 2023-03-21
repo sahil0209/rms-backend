@@ -1,10 +1,11 @@
-const controllers = require("../controllers/managers");
+const managerControllers = require("../controllers/managers");
 const express = require("express");
 const router = express.Router();
 
-router.post("/createProject", controllers.createProject);
-router.put("/:project_id", controllers.updateProject);
-router.get("/pastProjects", controllers.pastProjects);
+router.post("/createProject", managerControllers.createProject);
+router.put("/:project_id", managerControllers.updateProject);
+router.get("/pastProjects", managerControllers.pastProjects);
+router.post("/getEmployeeBasedOnGradeAndSkill", managerControllers.employeeBasedOnSkillAndGrade);
 
 
 

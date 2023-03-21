@@ -1,6 +1,6 @@
 const Project = require("../models/projects");
 const Employee = require("../models/employees");
-
+const Employee_Project = require("../models/employeeProjects");
 
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
@@ -26,7 +26,7 @@ exports.createProject = (req, res, next) => {
   const no_of_patners = req.body.no_of_patners;
   const funds_sanctioned = req.body.funds_sanctioned;
   const total_expenses = req.body.total_expenses;
-  const status = req.body.status;
+  const status = "NotApproved";
 
   Project.create({
     project_id: project_id,
@@ -102,36 +102,54 @@ exports.updateProject = (req, res, next) => {
 
 exports.getEmployeesWithProject = (req, res, next) => {
   const project_id = req.body.project_id;
-  Project.findAll({
+  Employee_Project.findAll({
     attributes: ["emp_id"],
-    where: {
-      project_id: project_id,
-    },
+    where: { project_id: project_id },
   })
     .then((emp_ids) => {
-      // let arr = [];
-      let emp_id_array = arr.map((ele) => {
+      let emp_id_array = emp_ids.map((ele) => {
         return ele.dataValues.emp_id;
       });
-      Project.findAll({
-        where: {
-          id: { $in: emp_id_array },
-        },
-      });
+      console.log("emp_id_array", emp_id_array);
+      Employee.findAll({ where: { emp_id: { [Op.in]: emp_id_array } } })
+        .then((data) => {
+          res.status(200).send({ data: data });
+        })
+        .catch((err) => {
+          res.status(500).send({ message: "Error Occured", err: err });
+        });
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
+
+
+
+
 exports.pastProjects = (req, res, next) => {
   const NOW = new Date();
   console.log(NOW);
   Project.findAll({
-    where: { end_date: { [Op.lt] : NOW } },
+    where: { end_date: { [Op.lt]: NOW } },
   })
     .then((result) => {
       res.status(200).send({ project: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.employeeBasedOnSkillAndGrade = (req, res, next) => {
+  const skill = req.body.emp_skills;
+  const band = req.body.emp_band;
+  Employee.findAll({
+    where: { emp_skills: skill, emp_band: band },
+  })
+    .then((result) => {
+      res.status(200).send({ Employee: result });
     })
     .catch((err) => {
       console.log(err);
