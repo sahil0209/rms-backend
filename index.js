@@ -36,8 +36,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoute);
-app.use("/manager", managerRoute);
-app.use("/admin", adminRoute);
+app.use("/managers", managerRoute);
+app.use("/admins", adminRoute);
 
 // app.listen(port, () => {
 //     console.log(`App running on port ${port}.`);
