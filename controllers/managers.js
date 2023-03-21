@@ -124,9 +124,42 @@ exports.getEmployeesWithProject = (req, res, next) => {
     });
 };
 
+exports.employeeAvailability = (req, res, next) => {
+  const emp_id = req.body.emp_id;
+  const st_date = req.body.start_date;
+  const end_date = req.body.end_date;
+  Employee_Project.findAll({
+    attributes: ["date_of_joining_project", "date_of_leaving_project"],
+    where: { emp_id: emp_id },
+  })
+    .then((data) => {
+      let dojl = data.map((ele) => {
+        return [
+          ele.dataValues.date_of_joining_project,
+          ele.dataValues.date_of_leaving_project,
+        ];
+      });
+      dojl.forEach((ele) => {
+        dateEle1 = new Date(ele[1]).getTime();
+        dateEle0 = new Date(ele[0]).getTime();
+        datest = new Date(st_date).getTime();
+        dateend = new Date(end_date).getTime();
 
-
-
+        console.log("condition1", dateEle1, datest, dateEle1 < datest);
+        console.log("condition2", dateEle0, dateend, dateEle0 > dateend);
+        if (
+          (dateEle0 < dateend && dateEle0 > datest) ||
+          (datest < dateEle1 && datest > dateEle0)
+        ) {
+          return res.status(500).send({ message: "overlapping occur" });
+        }
+      });
+      return res.status(200).send({ message: "No discrepancy", value: true });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 exports.pastProjects = (req, res, next) => {
   const NOW = new Date();
